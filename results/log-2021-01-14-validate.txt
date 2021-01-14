@@ -1,0 +1,55 @@
+ssh://nicolas@localhost:3310/home/nicolas/venvs/adam/bin/python -u /home/nicolas/code/ASL-pycharm/validate.py
+creating and loading the model...
+done
+
+loading annotations into memory...
+Done (t=4.97s)
+creating index...
+index created!
+len(val_dataset)):  40137
+starting actual validation
+Test: [0/1255]	Time 1.277 (1.277)	Precision 90.91 (90.91)	Recall 78.43 (78.43)
+P_C 23.75 R_C 23.76 F_C 23.16 P_O 90.91 R_O 78.43 F_O 84.21
+Test: [64/1255]	Time 0.293 (0.308)	Precision 87.62 (87.39)	Recall 76.03 (75.87)
+P_C 73.80 R_C 55.26 F_C 61.11 P_O 86.88 R_O 74.55 F_O 80.25
+Test: [128/1255]	Time 0.297 (0.302)	Precision 83.02 (86.60)	Recall 77.19 (77.10)
+P_C 78.60 R_C 60.84 F_C 66.77 P_O 85.94 R_O 75.02 F_O 80.11
+Test: [192/1255]	Time 0.299 (0.300)	Precision 86.96 (87.95)	Recall 85.11 (77.71)
+P_C 78.94 R_C 61.55 F_C 67.50 P_O 87.29 R_O 75.82 F_O 81.15
+Test: [256/1255]	Time 0.301 (0.301)	Precision 87.76 (88.18)	Recall 84.31 (78.27)
+P_C 80.16 R_C 62.41 F_C 68.34 P_O 87.55 R_O 76.47 F_O 81.63
+Test: [320/1255]	Time 0.303 (0.301)	Precision 84.93 (88.74)	Recall 75.61 (79.23)
+P_C 80.39 R_C 64.82 F_C 69.57 P_O 87.89 R_O 77.06 F_O 82.12
+Test: [384/1255]	Time 0.304 (0.301)	Precision 92.16 (88.85)	Recall 78.33 (79.19)
+P_C 80.05 R_C 64.47 F_C 69.53 P_O 88.03 R_O 77.14 F_O 82.23
+Test: [448/1255]	Time 0.305 (0.302)	Precision 88.71 (88.99)	Recall 80.88 (79.20)
+P_C 80.22 R_C 65.69 F_C 70.69 P_O 88.20 R_O 77.28 F_O 82.38
+Test: [512/1255]	Time 0.306 (0.302)	Precision 90.38 (88.85)	Recall 78.33 (79.23)
+P_C 81.83 R_C 67.05 F_C 72.33 P_O 88.22 R_O 77.41 F_O 82.46
+Test: [576/1255]	Time 0.306 (0.303)	Precision 87.06 (88.94)	Recall 81.32 (79.58)
+P_C 81.34 R_C 67.58 F_C 72.55 P_O 88.38 R_O 77.93 F_O 82.83
+Test: [640/1255]	Time 0.307 (0.303)	Precision 95.38 (89.27)	Recall 91.18 (80.14)
+P_C 81.50 R_C 68.10 F_C 72.94 P_O 88.61 R_O 78.30 F_O 83.13
+Test: [704/1255]	Time 0.307 (0.303)	Precision 94.52 (89.48)	Recall 78.41 (80.59)
+P_C 83.31 R_C 70.70 F_C 75.32 P_O 88.90 R_O 78.86 F_O 83.58
+Test: [768/1255]	Time 0.307 (0.304)	Precision 81.13 (89.41)	Recall 77.71 (80.89)
+P_C 84.04 R_C 72.33 F_C 76.70 P_O 88.74 R_O 79.01 F_O 83.59
+Test: [832/1255]	Time 0.307 (0.304)	Precision 90.14 (89.39)	Recall 87.67 (81.00)
+P_C 84.91 R_C 73.44 F_C 77.73 P_O 88.69 R_O 79.15 F_O 83.65
+Test: [896/1255]	Time 0.307 (0.304)	Precision 75.51 (89.25)	Recall 77.08 (81.13)
+P_C 85.09 R_C 73.91 F_C 78.09 P_O 88.58 R_O 79.39 F_O 83.73
+Test: [960/1255]	Time 0.307 (0.304)	Precision 88.41 (89.20)	Recall 74.39 (80.90)
+P_C 86.18 R_C 74.60 F_C 78.97 P_O 88.56 R_O 79.11 F_O 83.57
+Test: [1024/1255]	Time 0.307 (0.304)	Precision 72.88 (89.19)	Recall 79.63 (81.12)
+P_C 86.33 R_C 74.92 F_C 79.24 P_O 88.58 R_O 79.40 F_O 83.74
+Test: [1088/1255]	Time 0.307 (0.305)	Precision 86.92 (89.08)	Recall 78.15 (80.94)
+P_C 86.81 R_C 75.25 F_C 79.67 P_O 88.49 R_O 79.27 F_O 83.63
+Test: [1152/1255]	Time 0.307 (0.305)	Precision 82.91 (88.99)	Recall 74.62 (81.05)
+P_C 87.02 R_C 75.45 F_C 79.88 P_O 88.45 R_O 79.47 F_O 83.72
+Test: [1216/1255]	Time 0.307 (0.305)	Precision 80.66 (88.92)	Recall 79.78 (80.97)
+P_C 87.39 R_C 75.94 F_C 80.40 P_O 88.33 R_O 79.35 F_O 83.60
+--------------------------------------------------------------------
+ * P_C 87.40 R_C 76.38 F_C 80.84 P_O 88.06 R_O 79.23 F_O 83.41
+mAP score: 86.58931867534474
+
+Process finished with exit code 0

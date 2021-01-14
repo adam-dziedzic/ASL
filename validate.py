@@ -10,14 +10,24 @@ import torch.utils.data.distributed
 import torchvision.transforms as transforms
 import os
 
-from src.helper_functions.helper_functions import mAP, AverageMeter, CocoDetection
+from src.helper_functions.helper_functions import mAP, AverageMeter, \
+    CocoDetection
 from src.models import create_model
 import numpy as np
 
+from getpass import getuser
+
+user = getuser()
+
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
-parser.add_argument('data', metavar='DIR', help='path to dataset')
+parser.add_argument('--data', metavar='DIR',
+                    default=f'/home/{user}/data/coco/',
+                    help='Path to the dataset.')
 parser.add_argument('--model-name', default='tresnet_l')
-parser.add_argument('--model-path', default='./TRresNet_L_448_86.6.pth', type=str)
+parser.add_argument(
+    '--model-path',
+    default=f'/home/{user}/models/multi_label/MS_COCO_TRresNet_L_448_86.6.pth',
+    type=str)
 parser.add_argument('--num-classes', default=80)
 parser.add_argument('-j', '--workers', default=8, type=int, metavar='N',
                     help='number of data loading workers (default: 16)')
@@ -50,12 +60,14 @@ def main():
     normalize = transforms.Normalize(mean=[0, 0, 0],
                                      std=[1, 1, 1])
 
-    instances_path = os.path.join(args.data, 'annotations/instances_val2014.json')
+    instances_path = os.path.join(args.data,
+                                  'annotations2014/instances_val2014.json')
     data_path = os.path.join(args.data, 'val2014')
     val_dataset = CocoDetection(data_path,
                                 instances_path,
                                 transforms.Compose([
-                                    transforms.Resize((args.image_size, args.image_size)),
+                                    transforms.Resize(
+                                        (args.image_size, args.image_size)),
                                     transforms.ToTensor(),
                                     normalize,
                                 ]))
@@ -69,7 +81,7 @@ def main():
 
 
 def validate_multi(val_loader, model, args):
-    print("starting actuall validation")
+    print("starting actual validation")
     batch_time = AverageMeter()
     prec = AverageMeter()
     rec = AverageMeter()
@@ -107,9 +119,9 @@ def validate_multi(val_loader, model, args):
         this_tn = (pred + target).eq(0).sum()
 
         this_prec = this_tp.float() / (
-            this_tp + this_fp).float() * 100.0 if this_tp + this_fp != 0 else 0.0
+                this_tp + this_fp).float() * 100.0 if this_tp + this_fp != 0 else 0.0
         this_rec = this_tp.float() / (
-            this_tp + this_fn).float() * 100.0 if this_tp + this_fn != 0 else 0.0
+                this_tp + this_fn).float() * 100.0 if this_tp + this_fn != 0 else 0.0
 
         prec.update(float(this_prec), input.size(0))
         rec.update(float(this_rec), input.size(0))
