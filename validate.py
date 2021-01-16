@@ -10,8 +10,9 @@ import torch.utils.data.distributed
 import torchvision.transforms as transforms
 import os
 
-from src.helper_functions.helper_functions import mAP, AverageMeter, \
-    CocoDetection
+from src.helper_functions.helper_functions import mAP
+from src.helper_functions.helper_functions import CocoDetection
+from src.helper_functions.helper_functions import AverageMeter
 from src.models import create_model
 import numpy as np
 
@@ -25,13 +26,13 @@ parser.add_argument('--data', metavar='DIR',
                     help='Path to the dataset.')
 parser.add_argument(
     '--model-name',
-    # default='tresnet_l',
-    default='tresnet_xl',
+    default='tresnet_l',
+    # default='tresnet_xl',
 )
 parser.add_argument(
     '--model-path',
-    # default=f'/home/{user}/models/multi_label/coco/MS_COCO_TRresNet_L_448_86.6.pth',
-    default=f'/home/{user}/models/multi_label/coco/MS_COCO_TResNet_xl_640_88.4.pth',
+    default=f'/home/{user}/models/multi_label/coco/MS_COCO_TRresNet_L_448_86.6.pth',
+    # default=f'/home/{user}/models/multi_label/coco/MS_COCO_TResNet_xl_640_88.4.pth',
     # default=f'/home/{user}/models/multi_label/coco/Open_ImagesV6_TRresNet_L_448_86_3.pth',
     # default=f'/home/{user}/models/multi_label/coco/',
     type=str)
@@ -46,8 +47,15 @@ parser.add_argument('-b', '--batch-size', default=32, type=int,
                     metavar='N', help='mini-batch size (default: 16)')
 parser.add_argument('--print-freq', '-p', default=64, type=int,
                     metavar='N', help='print frequency (default: 64)')
-parser.add_argument('--version', default='2014', type=str,
+parser.add_argument('--version', default='2017', type=str,
                     help='the year of the dataset')
+parser.add_argument('--debug',
+                    default=True,
+                    # default=False,
+                    type=bool, help="Debug mode of execution")
+
+
+# from src.helper_functions.helper_functions import coco_classes_list
 
 
 def main():
@@ -66,31 +74,31 @@ def main():
     print('done\n')
 
     # Data loading code
-    normalize = transforms.Normalize(mean=[0, 0, 0],
-                                     std=[1, 1, 1])
+    normalize = transforms.Normalize(mean=[0, 0, 0], std=[1, 1, 1])
 
     version = args.version
     instances_path = os.path.join(
-        args.data, f'annotations{version}/instances_val{version}.json')
+        args.data, f'annotations/instances_val{version}.json')
     data_path = os.path.join(args.data, 'val' + version)
-    val_dataset = CocoDetection(data_path,
-                                instances_path,
-                                transforms.Compose([
-                                    transforms.Resize(
-                                        (args.image_size, args.image_size)),
-                                    transforms.ToTensor(),
-                                    normalize,
-                                ]))
+    val_dataset = CocoDetection(
+        data_path,
+        instances_path,
+        transforms.Compose([
+            transforms.Resize(
+                (args.image_size, args.image_size)),
+            transforms.ToTensor(),
+            normalize,
+        ]))
 
     print("len(val_dataset)): ", len(val_dataset))
     val_loader = torch.utils.data.DataLoader(
         val_dataset, batch_size=args.batch_size, shuffle=False,
         num_workers=args.workers, pin_memory=True)
 
-    validate_multi(val_loader, model, args)
+    validate_multi(val_loader, model, args, classes_list)
 
 
-def validate_multi(val_loader, model, args):
+def validate_multi(val_loader, model, args, classes_list):
     print("starting actual validation")
     batch_time = AverageMeter()
     prec = AverageMeter()
@@ -116,6 +124,13 @@ def validate_multi(val_loader, model, args):
 
         # measure accuracy and record loss
         pred = output.data.gt(args.thre).long()
+        if True:  # args.debug:
+            # print('target: ', target)
+            # print('pred: ', pred)
+            print('target names: ',
+                  classes_list[target[0].cpu().detach().numpy() == 1])
+            print('pred names: ',
+                  classes_list[pred[0].cpu().detach().numpy() == 1])
 
         tp += (pred + target).eq(2).sum(dim=0)
         fp += (pred - target).eq(1).sum(dim=0)
@@ -167,11 +182,6 @@ def validate_multi(val_loader, model, args):
             print(
                 'P_C {:.2f} R_C {:.2f} F_C {:.2f} P_O {:.2f} R_O {:.2f} F_O {:.2f}'
                     .format(mean_p_c, mean_r_c, mean_f_c, p_o, r_o, f_o))
-
-    print(
-        '--------------------------------------------------------------------')
-    print(' * P_C {:.2f} R_C {:.2f} F_C {:.2f} P_O {:.2f} R_O {:.2f} F_O {:.2f}'
-          .format(mean_p_c, mean_r_c, mean_f_c, p_o, r_o, f_o))
 
     mAP_score = mAP(torch.cat(targets).numpy(), torch.cat(preds).numpy())
     print("mAP score:", mAP_score)

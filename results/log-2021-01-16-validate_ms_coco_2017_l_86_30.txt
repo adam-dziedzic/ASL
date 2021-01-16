@@ -1,0 +1,19 @@
+ssh://nicolas@localhost:3310/home/nicolas/venvs/adam/bin/python -u /home/nicolas/code/ASL-pycharm/validate.py
+creating and loading the model...
+done
+
+loading annotations into memory...
+Done (t=0.44s)
+creating index...
+index created!
+len(val_dataset)):  4952
+starting actual validation
+Test: [0/155]	Time 1.684 (1.684)	Precision 84.29 (84.29)	Recall 68.21 (68.21)
+P_C 28.81 R_C 25.20 F_C 26.31 P_O 84.29 R_O 68.21 F_O 75.40
+Test: [64/155]	Time 0.292 (0.313)	Precision 96.67 (88.80)	Recall 84.06 (77.71)
+P_C 79.12 R_C 64.41 F_C 69.74 P_O 88.36 R_O 76.31 F_O 81.90
+Test: [128/155]	Time 0.296 (0.304)	Precision 88.73 (89.15)	Recall 80.77 (80.23)
+P_C 84.63 R_C 73.91 F_C 78.48 P_O 88.60 R_O 78.70 F_O 83.36
+mAP score: 86.3031744045929
+
+Process finished with exit code 0
