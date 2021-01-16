@@ -1,12 +1,12 @@
 import torch
 import torch.nn.parallel
-import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 
 
 class AntiAliasDownsampleLayer(nn.Module):
-    def __init__(self, remove_model_jit: bool = False, filt_size: int = 3, stride: int = 2,
+    def __init__(self, remove_model_jit: bool = False, filt_size: int = 3,
+                 stride: int = 2,
                  channels: int = 0):
         super(AntiAliasDownsampleLayer, self).__init__()
         if not remove_model_jit:
@@ -31,13 +31,15 @@ class DownsampleJIT(object):
 
         filt = (a[:, None] * a[None, :]).clone().detach()
         filt = filt / torch.sum(filt)
-        self.filt = filt[None, None, :, :].repeat((self.channels, 1, 1, 1)).cuda().half()
+        self.filt = filt[None, None, :, :].repeat(
+            (self.channels, 1, 1, 1)).cuda().half()
 
     def __call__(self, input: torch.Tensor):
         if input.dtype != self.filt.dtype:
-            self.filt = self.filt.float() 
+            self.filt = self.filt.float()
         input_pad = F.pad(input, (1, 1, 1, 1), 'reflect')
-        return F.conv2d(input_pad, self.filt, stride=2, padding=0, groups=input.shape[1])
+        return F.conv2d(input_pad, self.filt, stride=2, padding=0,
+                        groups=input.shape[1])
 
 
 class Downsample(nn.Module):
@@ -46,7 +48,6 @@ class Downsample(nn.Module):
         self.filt_size = filt_size
         self.stride = stride
         self.channels = channels
-
 
         assert self.filt_size == 3
         a = torch.tensor([1., 2., 1.])
@@ -57,4 +58,5 @@ class Downsample(nn.Module):
 
     def forward(self, input):
         input_pad = F.pad(input, (1, 1, 1, 1), 'reflect')
-        return F.conv2d(input_pad, self.filt, stride=self.stride, padding=0, groups=input.shape[1])
+        return F.conv2d(input_pad, self.filt, stride=self.stride, padding=0,
+                        groups=input.shape[1])

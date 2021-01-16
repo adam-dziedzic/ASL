@@ -23,10 +23,17 @@ parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
 parser.add_argument('--data', metavar='DIR',
                     default=f'/home/{user}/data/coco/',
                     help='Path to the dataset.')
-parser.add_argument('--model-name', default='tresnet_l')
+parser.add_argument(
+    '--model-name',
+    # default='tresnet_l',
+    default='tresnet_xl',
+)
 parser.add_argument(
     '--model-path',
-    default=f'/home/{user}/models/multi_label/MS_COCO_TRresNet_L_448_86.6.pth',
+    # default=f'/home/{user}/models/multi_label/coco/MS_COCO_TRresNet_L_448_86.6.pth',
+    default=f'/home/{user}/models/multi_label/coco/MS_COCO_TResNet_xl_640_88.4.pth',
+    # default=f'/home/{user}/models/multi_label/coco/Open_ImagesV6_TRresNet_L_448_86_3.pth',
+    # default=f'/home/{user}/models/multi_label/coco/',
     type=str)
 parser.add_argument('--num-classes', default=80)
 parser.add_argument('-j', '--workers', default=8, type=int, metavar='N',
@@ -39,6 +46,8 @@ parser.add_argument('-b', '--batch-size', default=32, type=int,
                     metavar='N', help='mini-batch size (default: 16)')
 parser.add_argument('--print-freq', '-p', default=64, type=int,
                     metavar='N', help='print frequency (default: 64)')
+parser.add_argument('--version', default='2014', type=str,
+                    help='the year of the dataset')
 
 
 def main():
@@ -60,9 +69,10 @@ def main():
     normalize = transforms.Normalize(mean=[0, 0, 0],
                                      std=[1, 1, 1])
 
-    instances_path = os.path.join(args.data,
-                                  'annotations2014/instances_val2014.json')
-    data_path = os.path.join(args.data, 'val2014')
+    version = args.version
+    instances_path = os.path.join(
+        args.data, f'annotations{version}/instances_val{version}.json')
+    data_path = os.path.join(args.data, 'val' + version)
     val_dataset = CocoDetection(data_path,
                                 instances_path,
                                 transforms.Compose([
